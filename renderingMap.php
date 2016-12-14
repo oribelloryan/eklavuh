@@ -64,12 +64,7 @@ $result = $conn->query($sql);
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};    
     var map;
     var target = JSON.parse(document.getElementById('target').value);
-
-    function release(){
-    var checkpoints = document.getElementById('checkpoints').value;
-    alert(target);
-    }
-
+    var checkpoints = JSON.parse(document.getElementById('checkpoints').value);
     function initMap() {
 
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -80,11 +75,19 @@ $result = $conn->query($sql);
    
     var marker = new google.maps.Marker({
           position: target,
+          //icon: 'images/target1.png',
           map: map,
           title: 'Target Location'
     });
-   
+    
+    for (var i = 0; i < checkpoints.length; i++) {
+          var checkpoint = checkpoints[i];
+          var markers = new google.maps.Marker({
+            position: {lat: checkpoint[1], lng: checkpoint[2]},
+            map: map,
+          });
      
+    }
 
     var strictBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(14.600561, 121.036487),
