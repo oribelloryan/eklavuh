@@ -16,26 +16,24 @@
 
     <!-- Custom styles for this template -->
     <link href="starter-template.css" rel="stylesheet">
-  <style>
-  #formradius{
-  layout:relative;
-  margin-left:200px;
+    
+    <style>
+      #formradius{
+      layout:relative;
+      margin-left:200px;
 
-  }
-  #blocker{
-      position:relative;
-      top:500px;
-      height:600px;
-      width:600px;
-      background-color:blue;
       }
-  #map{width: 1000px; height: 550px;
-    visibility:hidden;
-  }
-
-
-
-  </style>
+      #blocker{
+          position:relative;
+          top:500px;
+          height:600px;
+          width:600px;
+          background-color:blue;
+          }
+      #map{width: 1000px; height: 550px;
+        visibility:hidden;
+      }
+    </style>
 
   </head>
 
@@ -44,7 +42,7 @@
     <div class="navbar navbar-fixed-top">
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
-
+    
     <div class="container">
     <p id="mensahe">PLEASE SET RADIUS FIRST</p>
     <div id="map" ></div>
@@ -116,6 +114,7 @@
     });
     }
     var markerCounter = 0;
+    
     function addMarker(location, map) {
     // Add the marker at the clicked location, and add the next-available label
     // from the array of alphabetical characters.
