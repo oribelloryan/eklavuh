@@ -44,12 +44,12 @@
     </div>
     
     <div class="container">
-    <p id="mensahe">PLEASE SET RADIUS FIRST</p>
-    <div id="map" ></div>
     <div id="formradius">
+    <p id="mensahe">PLEASE SET RADIUS FIRST</p>
     <input type="number" id="radiussize">
     <button onClick="changeradius()">UPDATE RADIUS SIZE</button>
     </div>
+    <div id="map" ></div>
     </div><!-- /.container -->
     <script src="/maps/_/js/k=maps.m.fil.KoHMH1-Ja18.O/m=sc2,mo,lp,per,ep,ti,ds,stx,pwd,ppl,log,std,b/rt=j/d=1/rs=ACT90oGu5V0x0EMjSlOj-P6nAXYREJ_ntA" type="text/javascript"/></script>
     <script type="text/javascript">
@@ -60,9 +60,8 @@
         alert(radiussize);
         document.getElementById("map").style.visibility='visible';
         document.getElementById("mensahe").innerHTML='PLOTPOINTS';
-
-
         }
+
     var minZoomLevel = 15;
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};
     var map;
@@ -78,7 +77,21 @@
 
     
     });
+    
+    var flightPlanCoordinates = [
+          {lat: 14.600353, lng: 121.036745},
+          {lat: 14.600561, lng: 121.036487},
+          {lat: 14.616383, lng: 121.058138},
+        ];
+    var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
 
+    flightPath.setMap(map);
     directionsDisplay.setMap(map);
     var strictBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(14.600561, 121.036487),
@@ -89,16 +102,16 @@
     if (strictBounds.contains(map.getCenter())) return;
     // We're out of bounds - Move the map back within the bounds
     var c = map.getCenter(),
-    x = c.lng(),
-    y = c.lat(),
-    maxX = strictBounds.getNorthEast().lng(),
-    maxY = strictBounds.getNorthEast().lat(),
-    minX = strictBounds.getSouthWest().lng(),
-    minY = strictBounds.getSouthWest().lat();
-    if (x < minX) x = minX;
-    if (x > maxX) x = maxX;
-    if (y < minY) y = minY;
-    if (y > maxY) y = maxY;
+        x = c.lng(),
+        y = c.lat(),
+             maxX = strictBounds.getNorthEast().lng(),
+             maxY = strictBounds.getNorthEast().lat(),
+             minX = strictBounds.getSouthWest().lng(),
+            minY = strictBounds.getSouthWest().lat();
+                if (x < minX) x = minX;
+                if (x > maxX) x = maxX;
+                if (y < minY) y = minY;
+                if (y > maxY) y = maxY;
     map.setCenter(new google.maps.LatLng(y,x));
     });
 
@@ -195,6 +208,7 @@
         return false;
     }
     }
+
 
     function sendingData(location, checkpoints){
     var checkpoint = JSON.stringify(checkpoints);

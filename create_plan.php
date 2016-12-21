@@ -67,7 +67,7 @@
         <p class="lead">Create New Plan</p>
       </div>
       <div class="col-lg-4">
-        <img src="images/history.png" class="icons">
+        <img src="images/histor y.png" class="icons">
         <p class="lead">Operations History</p>
       </div>
       <div class="col-lg-4">
