@@ -34,10 +34,10 @@ $result = $conn->query($sql);
     <link href="starter-template.css" rel="stylesheet">
   <style>
   #map{
-        width: 100%;
+       width: 100%;
        height: 550px; 
        margin: auto;
-  }
+       }
   </style>
 
   </head>

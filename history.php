@@ -80,25 +80,25 @@ function dateDifference($date1, $date2){
     <div class="container-fluid">
     <br>
     <br>
+    <div class="row">
     <?php echo "<center><h4>".$today."</h4></center>"; ?>
  
     <?php
     while($result = $results->fetch_assoc()){
-     //echo "<a href=#>";
      $d = dateDifference(dateformatting($today),dateformatting($result['date_execute']));
      $diff = $d[1];
      $id = $result['operation_id'];
-     echo '<div class="data_container" style="background:$d[0]" onClick="return pressed('.$id.');">';
-     echo "<p>" .$id."</p>";
-     echo "<p>" .$result['operation_name']."</p>";
-     echo "<p> Date planned: " .dateformatting($result['date_plan'])."</p>";
-     echo "<p> Date to execute: " .dateformatting($result['date_execute'])."</p>";
+     echo '<div class="col-sm-4"  style="background:$d[0]" onClick="return pressed('.$id.');">';
+             echo "<p>" .$id."</p>";
+             echo "<p>" .$result['operation_name']."</p>";
+             echo "<p> Date planned: " .dateformatting($result['date_plan'])."</p>";
+             echo "<p> Date to execute: " .dateformatting($result['date_execute'])."</p>";
      if($diff<0){
      $neg = abs($diff);
-     echo "<p>Executed: $neg days ago</p>";
+                echo "<p>Executed: $neg days ago</p>";
      }else if($diff>0){
      $pos = abs($diff);
-     echo "<p>To execute: $pos days to go</p>";
+                echo "<p>To execute: $pos days to go</p>";
      }
      echo "</div>";
     // echo "</a>";
