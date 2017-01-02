@@ -50,13 +50,65 @@
       <p>Total Distance: <span id="total"></span></p>
     </div>
     <script>
+
+
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
-          center: {lat:14.600353, lng:121.036745}  // Australia.
+          center: {lat: 14.600353, lng: 121.036745}  // Australia.
         });
+        
+        google.maps.event.addListener(map, 'click', function(event) {
+          addMarker(event.latLng, map);
+          addMarker2(event.latLng, map);
+        });
+      }
 
-        var directionsService = new google.maps.DirectionsService;
+      function addMarker(location, map){
+        var marker = new google.maps.Marker({
+          position : location,
+          map : map
+        });
+      }
+
+      function addMarker2(location, map) {
+    // Add the marker at the clicked location, and add the next-available label
+    // from the array of alphabetical characters.
+    var ctr;
+    var curr;
+    var point1=[];
+
+    //var directionService = new google.maps.DirectionService();
+    var mapradius=1000*.0000100;
+    var xcor;
+    var ycor;
+
+    for (ctr=0;ctr<10;ctr++){
+    xcor=location.lat()+(mapradius*Math.cos(ctr));
+    ycor=location.lng()+(mapradius*Math.sin(ctr));
+    var newlocation = new google.maps.LatLng(xcor,ycor);
+    var check = new google.maps.LatLng(xcor,ycor);
+
+    point1.push(newlocation);
+
+    ctr=ctr;
+    xcor=xcor;
+    ycor=ycor;
+  }
+
+  
+
+    var i;
+    var marker;
+    for (i=0;i<point1.length;i++){
+     marker = new google.maps.Marker({
+    position:point1[i],
+    map: map
+    });
+    marker.setAnimation(google.maps.Animation.DROP);
+     }
+
+    var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer({
           draggable: true,
           map: map,
@@ -67,19 +119,32 @@
           computeTotalDistance(directionsDisplay.getDirections());
         });
 
-        displayRoute(' {14.592164, 121.041601 }', '{14.606622, 121.056984 },', directionsService,
+        displayRoute(location,point1, directionsService,
             directionsDisplay);
       }
 
-      function displayRoute(origin, destination, service, display) {
+    function displayRoute(origin, destination, service, display) {
+        var destinations = destination;
+        console.log(destinations);
+        function data(){
+          console.log(destinations);
+            var i;
+
+            for(i=0;i<destinations.length;i++){
+              var destinate = new google.maps.LatLng(destination[i].latlng);
+              console.log(destinate);
+              return destinate;
+            }
+          }
+
         service.route({
           origin: origin,
-          destination: destination,
+          destination: data(),
           // waypoints: [{location: 'Adelaide, SA'}, {location: 'Broken Hill, NSW'}],
           travelMode: 'DRIVING',
           avoidTolls: true
         }, function(response, status) {
-          if (status === 'OK') {
+          if(status === 'OK') {
             display.setDirections(response);
           } else {
             alert('Could not display directions due to: ' + status);
@@ -97,8 +162,8 @@
         document.getElementById('total').innerHTML = total + ' km';
       }
     </script>
-       <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1SFa75QzMfOtf7rudCh6RFgaNk6ptbzo&libraries=geometry&callback=initMap">
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1SFa75QzMfOtf7rudCh6RFgaNk6ptbzo&callback=initMap">
     </script>
   </body>
 </html>

@@ -60,13 +60,14 @@
         alert(radiussize);
         document.getElementById("map").style.visibility='visible';
         document.getElementById("mensahe").innerHTML='PLOTPOINTS';
-        }
+    }
 
     var minZoomLevel = 15;
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};
     var map;
     var directionsService;
     var directionsDisplay;
+
     function initMap() {
      directionsService = new google.maps.DirectionsService;
      directionsDisplay = new google.maps.DirectionsRenderer;
@@ -157,7 +158,7 @@
           {lat: 14.609397, lng: 121.034167 },
           {lat: 14.609397, lng: 121.034777 },
           {lat: 14.608796, lng: 121.035254 },
-          {lat: 14.608553, lng: 121.035756 },    
+          {lat: 14.608553, lng: 121.035756 },
           {lat: 14.608646, lng: 121.036210 },
           {lat: 14.608634, lng: 121.036318 },
           {lat: 14.608484, lng: 121.036592 },
@@ -224,6 +225,7 @@
     addMarker2(event.latLng, map);
     });
     }
+
     var markerCounter = 0;
     
     function addMarker(location, map) {
@@ -253,7 +255,7 @@
     radius: radiussize
 
     });*/
-}
+    }
 
 
     var circleCounter = 0;
