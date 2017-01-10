@@ -2,9 +2,15 @@ function sendingData(location, checkpoints){
     var checkpoint = JSON.stringify(checkpoints);
     var target = JSON.stringify(location);
     $.ajax({
-        url: 'storing.php?checkpoints='+checkpoint+'&target='+target,
-        type: 'GET',
+        url: 'server_storing.php',
+        type: 'POST',
+        data:{
+        	target : target,
+        	checkpoints : checkpoints,
+       		location : "server_plotting",
+        },
         success: function(results) {
+        	alert(results);
         }
     });
    }

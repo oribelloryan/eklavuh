@@ -1,3 +1,46 @@
+
+    var path = [];
+    var polygons = [];
+    function createGeoJsonPolygon(data) {
+    var bounds = new google.maps.LatLngBounds();
+    var coords = [];
+    for (var i = 0, len = data.features.length; i < len; i++) {
+        coords = data.features[i].geometry.coordinates[0];
+
+        for (var j = 0; j < coords.length; j++) {
+            var pt = new google.maps.LatLng(coords[j][1], coords[j][0]);
+            bounds.extend(pt);
+            path.push(pt);
+        }
+        var polygon = new google.maps.Polygon({
+            path: path,
+            strokeColor : '#ff1a1a',
+            strokeOpacity: 1,
+            strokeWeight: 1.5,
+            fillColor : '#ffffff',
+            fillOpacity: 0,
+        });
+        polygons.push(polygon);
+        path = [];
+
+    }
+
+    polygons.forEach(function (polygon) {
+        polygon.setMap(map);
+        google.maps.event.addListener(polygon, 'click', function (event) {
+       var confirmation = confirm("Are you sure to save this target area?");
+    if(confirmation == true){
+        addMarker(event.latLng, map);
+        addMarker2(event.latLng, map);
+        
+    }else if(confirmation == false){
+        marker.setMap(null);
+    }
+    
+        });
+    });
+}
+
  var geoBoundaries =  {
   "type": "FeatureCollection",
   "features": [{

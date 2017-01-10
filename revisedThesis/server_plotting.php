@@ -1,15 +1,3 @@
-<?php  
-include('db_conn.php');
-if(isset($_POST["submit"])){
-
-$op_name = $_POST['operation_name'];
-$op_pass = $_POST['operation_password'];
-$date_execute = $_POST['execute'];
-$officers = $_POST['num_officers'];
-
-$sql_insert = "INSERT INTO tbl_operations (operation_name, operation_password, date_plan, date_execute, num_officers)
-VALUES ('$op_name','$op_pass',current_date(),'$date_execute','$officers')";
-}?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -141,48 +129,6 @@ VALUES ('$op_name','$op_pass',current_date(),'$date_execute','$officers')";
 
    
     }
-
-    var path = [];
-    var polygons = [];
-    function createGeoJsonPolygon(data) {
-    var bounds = new google.maps.LatLngBounds();
-    var coords = [];
-    for (var i = 0, len = data.features.length; i < len; i++) {
-        coords = data.features[i].geometry.coordinates[0];
-
-        for (var j = 0; j < coords.length; j++) {
-            var pt = new google.maps.LatLng(coords[j][1], coords[j][0]);
-            bounds.extend(pt);
-            path.push(pt);
-        }
-        var polygon = new google.maps.Polygon({
-            path: path,
-            strokeColor : '#ff1a1a',
-            strokeOpacity: 1,
-            strokeWeight: 1.5,
-            fillColor : '#ffffff',
-            fillOpacity: 0,
-        });
-        polygons.push(polygon);
-        path = [];
-
-    }
-
-    polygons.forEach(function (polygon) {
-        polygon.setMap(map);
-        google.maps.event.addListener(polygon, 'click', function (event) {
-       var confirmation = confirm("Are you sure to save this target area?");
-    if(confirmation == true){
-        addMarker(event.latLng, map);
-        addMarker2(event.latLng, map);
-        
-    }else if(confirmation == false){
-        marker.setMap(null);
-    }
-    
-        });
-    });
-}
 
     var markerCounter = 0;
     
