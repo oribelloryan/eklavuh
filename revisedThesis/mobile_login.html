@@ -15,30 +15,93 @@
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+   <link href="signin.css" rel="stylesheet">
+   <style>
+   #examplecontent {
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+  } 
+  </style>
   </head>
 
   <body>
+     <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+      <!-- Modal content-->
+       <div class="modal-content">
+          <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+    </div>
 
     <div class="container">
       <center><img src="images/logo_interceptor.png" style="height:310px;width:220px;margin-top:-50px;"></center>
-      <form class="form-signin" method="GET" action="mobile_logging.php">
+      <form class="form-signin" type="POST">
         <center><h1 style="font-size:28px;color:#ffffff;">OPERATION LOGIN</h1>
         <p style="color:#ffffff;font-size:20px;">Operation Name :</p></center>
-        <input type="text" id="inputOPName" name="name" class="form-control" placeholder="Enter Operation Name..." required autofocus>
+        <input type="text" id="opname" name="name" class="form-control" placeholder="Enter Operation Name...">
         <center><p style="color:#ffffff;font-size:20px;">Operation Password :</p></center>
-        <input type="password" id="inputOPPass" name="pass" class="form-control" placeholder="Enter Operation Password..." required>        
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <input type="password" id="oppass" name="pass" class="form-control" placeholder="Enter Operation Password...">        
+        <button class="btn btn-lg btn-primary btn-block" onClick="login();" type="button" id="submit">Sign in</button>
         <button class="btn btn-lg btn-primary btn-block" type="reset">Reset</button>
       </form>
 
     </div> <!-- /container -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    
+    function login(){
+      var operation = document.getElementById('opname');
+      var password = document.getElementById('oppass');
+      if(operation.value == "") {
+      alert("Please provide the OPERATION'S NAME")
+      operation.focus();
+      return false;
+      }
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+      if(password.value == "") {
+      alert('Please provide the password for the operation')
+      password.focus();
+      return false;
+      }
+    
+      $.ajax({
+        url : "mobile_logging.php",
+        type : "POST",
+        dataType: "JSON",
+        data : {
+          name : operation.value,
+          pass : password.value,
+      },
+        success : function(msg){
+          var info;
+          if(msg == "NoRecord"){
+            alert("Invalid Credentials");
+          }else{
+            info = 'Operation Id: '+msg.operation_id +
+            '\nOperation Name: '+ msg.operation_name +
+            '\nDate Planned: ' + msg.date_plan;
+            var x = confirm(info);
+            if(x === true){
+              alert("You will be directed to the operation details");
+              window.location.href= "mobile_map_rendering.html?id="+msg.operation_id;
+            }else{
+              return false;
+            }
+          }
+        }
+      });
+    }
+    </script>
   </body>
 </html>

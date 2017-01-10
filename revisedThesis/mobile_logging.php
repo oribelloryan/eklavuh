@@ -1,22 +1,19 @@
-
 <?php
 include('db_conn.php');
 
-$operation = $_GET['name'];
-$password = $_GET['pass'];
+$operation = $_POST['name'];
+$password = $_POST['pass'];
 
-$stmt = mysqli_query($conn, "SELECT * FROM tbl_operations WHERE operation_name = '$operation' AND operation_password ='$password'");
-while($result = mysqli_fetch_assoc($stmt)){
-	$data = $result['operation_id'];
+$stmt = $conn->prepare("SELECT * FROM tbl_operations WHERE operation_name = :op AND operation_password = :pa LIMIT 1");
+$stmt->bindValue(":op", $operation);
+$stmt->bindValue(":pa", $password);
+$stmt->execute();
+
+if($stmt->rowCount() === 1)
+{
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);;
+    echo json_encode($row);
+}else{
+	echo json_encode('NoRecord');
 }
- echo "<script src='js/cookies.js' type='text/javascript'></script>";
- echo "<script>setCookie('operationId', $data, 1);</script>";
-$rows = mysqli_num_rows($stmt);
-if($rows==1)//You are mixing the mysql and mysqli, change this line of code
-    {
-       	header('location:mobile_map_rendering.html');
-      
-		}else{
-	   header('location:mobile_login.html');
-	}
 ?>

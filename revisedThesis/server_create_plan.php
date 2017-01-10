@@ -1,22 +1,11 @@
 <?php
 include('db_conn.php');
-if(isset($_POST["submit"])){
-
-$op_name = $_POST['operation_name'];
-$op_pass = $_POST['operation_password'];
-$date_execute = $_POST['execute'];
-$officers = $_POST['num_officers'];
-
-$sql_insert = "INSERT INTO tbl_operations (operation_name, operation_password, date_plan, date_execute, num_officers)
-VALUES ('$op_name','$op_pass',current_date(),'$date_execute','$officers')";
-
-if ($conn->query($sql_insert) === TRUE) {
-echo "<script type= 'text/javascript'>alert('New record created successfully');</script>";
-header('location:plotting.php');
-} else {
-echo "<script type= 'text/javascript'>alert('Error: " . $sql_insert . "<br>" . $conn->error."');</script>";
-}
-}
+$stmt= $conn->query("SELECT MAX(operation_id) as id FROM tbl_operations");
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      $last_id = $row['id'];
+      $current_id = $last_id + 1;
+      $_SESSION['id'] = $current_id;
+      }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,27 +33,12 @@ echo "<script type= 'text/javascript'>alert('Error: " . $sql_insert . "<br>" . $
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
 
-     <?php
-      // Check connection
-      if (mysqli_connect_errno())
-        {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-
-      $sql= $conn->query("SELECT MAX(operation_id) as id FROM tbl_operations");
-      while($row = $sql->fetch_assoc()){
-      $last_id = $row['id'];
-      $current_id = $last_id + 1;
-      $_SESSION['id'] = $current_id;
-      }
-    ?>
-
     <div class="container">
       <div class="col-lg-6" style="margin-top:-5%;">
         <h1>OPERATION DETAILS</h1>
         <form action="server_plotting.php" method="POST">
         <label>Operation ID</label>
-        <input type="text" class="form-control" value=<?php echo $current_id;?> disabled>
+        <input type="text" class="form-control" value= "<?php echo $current_id; ?>" disabled>
         <label>Operation Name</label>
         <input type="text" class="form-control" name="operation_name" required>
         <label>Operation Password</label>

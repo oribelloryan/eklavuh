@@ -187,18 +187,6 @@ function createGeoJsonPolygon(data) {
     polygons.forEach(function (polygon) {
         polygon.setMap(map);
         google.maps.event.addListener(polygon, 'click', function (event) {
-        
-            var circle = new google.maps.Circle({
-                strokeColor: '#000000',
-                strokeOpacity: 1,
-                strokeWeight: 3,
-                fillColor: '#FF0000',
-                fillOpacity: 0,
-                map: map,
-                clickable: false,
-                center: event.latLng,
-                radius: 500
-            });
         });
     });
 }

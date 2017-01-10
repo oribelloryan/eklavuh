@@ -30,6 +30,8 @@
   </head>
 
   <body>
+    <input type="hidden" id="target" />
+    <input type="hidden" id="checkpoints" />
     <div class="navbar navbar-fixed-top">
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
@@ -44,24 +46,36 @@
     <button onClick="release()">Coordinates</button>
     </div>
     </div><!-- /.container -->
-    <script src="js/cookies.js" type="text/JavaScript"></script>
     <script type="text/javascript">
+    function getUrl(){
+      var url = window.location.href;
+      var start = url.indexOf('=')+1;
+      var id = url.substring(start);
+      return id;
+    } 
+    var oppId = getUrl();
+    var target;
     (function (){
        $.ajax({
         type: "POST",
         url: "mobile_map_renderingajax.php",
         dataType : "json",
         data: {
-          id: checkCookie()
+          id: oppId,
         },
-        success: function(msg){ 
-            checkpoints =  jQuery.parseJSON(msg.checkpoints);
-            target = jQuery.parseJSON(msg.target);
-            document.getElementById('date_executed').innerHTML = msg.date_execute;
-            document.getElementById('num_officers').innerHTML = msg.officers;
+        success: function(msg){
+          checkpoints =  jQuery.parseJSON(msg.checkpoints);
+          target = jQuery.parseJSON(msg.target); 
+          document.getElementById('target').innerHTML = target;
+          document.getElementById('checkpoints').innerHTML = checkpoints;
+          document.getElementById('date_executed').innerHTML = msg.date_execute;
+          document.getElementById('num_officers').innerHTML = msg.officers;
         },
         });
     })();
+
+    var target = document.getElementById('target').value;
+    var checkpoints =  document.getElementById('checkpoints').value;
     var minZoomLevel = 15;
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};    
     var map;
@@ -135,8 +149,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

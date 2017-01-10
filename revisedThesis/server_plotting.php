@@ -1,3 +1,15 @@
+<?php  
+include('db_conn.php');
+if(isset($_POST["submit"])){
+
+$op_name = $_POST['operation_name'];
+$op_pass = $_POST['operation_password'];
+$date_execute = $_POST['execute'];
+$officers = $_POST['num_officers'];
+
+$sql_insert = "INSERT INTO tbl_operations (operation_name, operation_password, date_plan, date_execute, num_officers)
+VALUES ('$op_name','$op_pass',current_date(),'$date_execute','$officers')";
+}?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -84,16 +96,18 @@
     
     });
     
-    sanJuanBoundaries = new google.maps.Polygon({
-          paths: [boundaries],
-          strokeColor: '#FFC107',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FFFFFF',
-          fillOpacity: 0.35
-        });
+     createGeoJsonPolygon(geoBoundaries);
 
-    sanJuanBoundaries.setMap(map);
+    // sanJuanBoundaries = new google.maps.Polygon({
+    //       paths: [boundaries],
+    //       strokeColor: '#FFC107',
+    //       strokeOpacity: 0.8,
+    //       strokeWeight: 2,
+    //       fillColor: '#FFFFFF',
+    //       fillOpacity: 0.35
+    //     });
+
+    // sanJuanBoundaries.setMap(map);
 
 
     directionsDisplay.setMap(map);
@@ -125,11 +139,50 @@
     });
 
 
-    google.maps.event.addListener(map, 'click', function(event) {
-    addMarker(event.latLng, map);
-    addMarker2(event.latLng, map);
-    });
+   
     }
+
+    var path = [];
+    var polygons = [];
+    function createGeoJsonPolygon(data) {
+    var bounds = new google.maps.LatLngBounds();
+    var coords = [];
+    for (var i = 0, len = data.features.length; i < len; i++) {
+        coords = data.features[i].geometry.coordinates[0];
+
+        for (var j = 0; j < coords.length; j++) {
+            var pt = new google.maps.LatLng(coords[j][1], coords[j][0]);
+            bounds.extend(pt);
+            path.push(pt);
+        }
+        var polygon = new google.maps.Polygon({
+            path: path,
+            strokeColor : '#ff1a1a',
+            strokeOpacity: 1,
+            strokeWeight: 1.5,
+            fillColor : '#ffffff',
+            fillOpacity: 0,
+        });
+        polygons.push(polygon);
+        path = [];
+
+    }
+
+    polygons.forEach(function (polygon) {
+        polygon.setMap(map);
+        google.maps.event.addListener(polygon, 'click', function (event) {
+       var confirmation = confirm("Are you sure to save this target area?");
+    if(confirmation == true){
+        addMarker(event.latLng, map);
+        addMarker2(event.latLng, map);
+        
+    }else if(confirmation == false){
+        marker.setMap(null);
+    }
+    
+        });
+    });
+}
 
     var markerCounter = 0;
     
@@ -149,17 +202,6 @@
         alert("One marker at a time");
         return false;
     }
-    /*var cityCircle = new google.maps.Circle({
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.1,
-    map: map,
-    center: location,
-    radius: radiussize
-
-    });*/
     }
 
 
@@ -200,19 +242,10 @@
     });
     marker.setAnimation(google.maps.Animation.DROP);
     }
-    /*alertMarker = map.getBounds().contains(marker.getPosition());
-    alert(alertMarker);*/
-    var confirmation = confirm("Are you sure to save this target area?");
-    if(confirmation == true){
-        sendingData(location, point1);
-    }else if(confirmation == false){
-        marker.setMap(null);
-        alert("False");
+
+    sendingData(location, point1);
     }
-    }else{
-        return false;
-    }
-    }
+}
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1SFa75QzMfOtf7rudCh6RFgaNk6ptbzo&libraries=geometry&callback=initMap">
