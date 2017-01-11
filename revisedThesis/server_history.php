@@ -1,23 +1,6 @@
 <?php
 include('db_conn.php');
 
-if(isset($_POST["submit"])){
-
-$op_name = $_POST['operation_name'];
-$op_pass = $_POST['operation_password'];
-$date_execute = $_POST['execute'];
-$officers = $_POST['num_officers'];
-
-$sql_insert = "INSERT INTO tbl_operations (operation_name, operation_password, date_plan, date_execute, num_officers)
-VALUES ('$op_name','$op_pass',current_date(),'$date_execute','$officers')";
-
-if ($conn->query($sql_insert) === TRUE) {
-echo "<script type= 'text/javascript'>alert('New record created successfully');</script>";
-header('location:plotting.php');
-} else {
-echo "<script type= 'text/javascript'>alert('Error: " . $sql_insert . "<br>" . $conn->error."');</script>";
-}
-}
 $today = date("Y-M-d");
 
 $sql = "SELECT * FROM tbl_operations";
@@ -102,7 +85,7 @@ function dateDifference($date1, $date2){
     <?php echo "<center><h4>".$today."</h4></center>"; ?>
  
     <?php
-    while($result = $results->fetch_assoc()){
+    while($result = $results->fetch(PDO::FETCH_ASSOC)){
      $d = dateDifference(dateformatting($today),dateformatting($result['date_execute']));
      $diff = $d[1];
      $id = $result['operation_id'];
@@ -129,7 +112,7 @@ function dateDifference($date1, $date2){
     function pressed(id){
     var d = confirm("You are to proceed to operation no: "+id);
     if(d){
-        window.location = "renderingMap.php?id="+id;
+        window.location = "server_renderingMap.php?id="+id;
     }else{
 
     }

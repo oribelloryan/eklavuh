@@ -36,7 +36,8 @@ $stmt= $conn->query("SELECT MAX(operation_id) as id FROM tbl_operations");
     <div class="container">
       <div class="col-lg-6" style="margin-top:-5%;">
         <h1>OPERATION DETAILS</h1>
-        <form action="server_plotting.php" method="POST">
+        <form action="server_storing.php" method="POST">
+        <input type="hidden" name="server_create_plan"/>
         <label>Operation ID</label>
         <input type="text" class="form-control" value= "<?php echo $current_id; ?>" disabled>
         <label>Operation Name</label>
