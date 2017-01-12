@@ -30,8 +30,10 @@
           width:600px;
           background-color:blue;
           }
-      #map{width: 1000px; height: 550px;
-        visibility:hidden;
+      #map{
+          width: 1000px; 
+          height: 550px;
+         -webkit-filter: blur(12px);
       }
     </style>
 
@@ -39,11 +41,11 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top" style="margin-top:-80px;">
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
     
-    <div class="container">
+    <div class="container" id="container">
     <div id="formradius">
     <p id="mensahe">PLEASE SET RADIUS FIRST</p>
     <input type="number" id="radiussize">
@@ -51,14 +53,17 @@
     </div>
     <div id="map" ></div>
     </div><!-- /.container -->
-    <script src="/maps/_/js/k=maps.m.fil.KoHMH1-Ja18.O/m=sc2,mo,lp,per,ep,ti,ds,stx,pwd,ppl,log,std,b/rt=j/d=1/rs=ACT90oGu5V0x0EMjSlOj-P6nAXYREJ_ntA" type="text/javascript"/></script>
     <script type="text/javascript">
 
     var radiussize=0;
     function changeradius(){
         radiussize=document.getElementById("radiussize").value;
         alert(radiussize);
-        document.getElementById("map").style.visibility='visible';
+        var blur = document.getElementById('map').setAttribute("style", 
+          "transition-timing-function: ease-in-out;" +
+          "-webkit-transition-duration: 1.5s;" +
+          "-webkit-filter: blur(0px);");
+        window.appendChild(blur);
         document.getElementById("mensahe").innerHTML='PLOTPOINTS';
     }
 
@@ -75,13 +80,10 @@
     zoom: minZoomLevel,
     scrollwheel: false,
     navigationControl: false,
-    mapTypeControl: false,
     scaleControl: false,
     draggable: false,
     center: centeroftheearth ,
     mapTypeId: 'roadmap'
-
-    
     });
     
     var boundaries = [
@@ -190,8 +192,6 @@
 
     sanJuanBoundaries.setMap(map);
 
-
-    directionsDisplay.setMap(map);
     var strictBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(14.600561, 121.036487),
     new google.maps.LatLng(14.616383, 121.058138)
@@ -206,7 +206,7 @@
              maxX = strictBounds.getNorthEast().lng(),
              maxY = strictBounds.getNorthEast().lat(),
              minX = strictBounds.getSouthWest().lng(),
-            minY = strictBounds.getSouthWest().lat();
+             minY = strictBounds.getSouthWest().lat();
                 if (x < minX) x = minX;
                 if (x > maxX) x = maxX;
                 if (y < minY) y = minY;
@@ -244,17 +244,6 @@
         alert("One marker at a time");
         return false;
     }
-    /*var cityCircle = new google.maps.Circle({
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.1,
-    map: map,
-    center: location,
-    radius: radiussize
-
-    });*/
     }
 
 
@@ -267,39 +256,58 @@
     circleCounter++;
     var ctr;
     var curr;
-    var point1=[];
+    var point1={};
 
     //var directionService = new google.maps.DirectionService();
     var mapradius=radiussize*.0000100;
     var xcor;
     var ycor;
+    var index=0;
     for (ctr=0;ctr<360;ctr++){
     xcor=location.lat()+(mapradius*Math.cos(ctr));
     ycor=location.lng()+(mapradius*Math.sin(ctr));
     var newlocation = {latlng:new google.maps.LatLng(xcor,ycor)};
-    var check = {latlng:new google.maps.LatLng(xcor,ycor)};
-
-    point1.push(newlocation);
-
-    ctr=ctr+4;
+    var check = xcor+","+ycor;
+    $.ajax({
+        url: "https://roads.googleapis.com/v1/nearestRoads?points="+check+"&key=AIzaSyA9GyIjrrtsKVdm3sf1o6shJMYDIvlzU0w",
+        type: 'GET',
+        success: function(results) {
+          $.each(results, function(i , v){
+              $.each(v, function(x, y){
+                  var xy = "{latlng:"+x.y.location.latitude+","+y.location.longitude+"}";
+                  point1[index] = xy;
+                  console.log(point1);
+              });
+          });
+        }
+    });
+    ctr=ctr+30;
     xcor=xcor;
     ycor=ycor;
+    index++;
     }
-
+    console.log(point1.latlng);
     var i;
     var marker;
     for (i=0;i<point1.length;i++){
-     marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
     position:point1[i].latlng,
     map: map
     });
     marker.setAnimation(google.maps.Animation.DROP);
     }
-    /*alertMarker = map.getBounds().contains(marker.getPosition());
-    alert(alertMarker);*/
+    
+    
+    //  marker = new google.maps.Marker({
+    // position:b,
+    // map: map
+    // });
+    // marker.setAnimation(google.maps.Animation.DROP);
+    
+
     var confirmation = confirm("Are you sure to save this target area?");
     if(confirmation == true){
-        sendingData(location, point1);
+        // sendingData(location, point1);
     }else if(confirmation == false){
         marker.setMap(null);
         alert("False");
@@ -336,8 +344,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
   </body>
 </html>
