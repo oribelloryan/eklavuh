@@ -289,6 +289,7 @@
     var i;
     var marker;
     for (i=0;i<point1.length;i++){
+    console.log(point1[i]);
      marker = new google.maps.Marker({
     position:point1[i].latlng,
     map: map

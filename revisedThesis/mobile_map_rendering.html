@@ -37,7 +37,7 @@
     </div>
 
     <div class="container">
-    <p><h4><center></center></h4></p>
+    <p><h4><center>Operation :<span id="operation_name"></span></center></h4></p>
     <p>Date Executed: <span id="date_executed"></span>
     <p>Number of officers: <span id="num_officers"></span>
     <div id="map" ></div>
@@ -52,30 +52,34 @@
       var start = url.indexOf('=')+1;
       var id = url.substring(start);
       return id;
-    } 
+    };
+    window.onLoad = getUrl();
     var oppId = getUrl();
     var target;
     (function (){
        $.ajax({
         type: "POST",
         url: "mobile_map_renderingajax.php",
-        dataType : "json",
         data: {
           id: oppId,
         },
         success: function(msg){
-          checkpoints =  jQuery.parseJSON(msg.checkpoints);
-          target = jQuery.parseJSON(msg.target); 
-          document.getElementById('target').innerHTML = target;
-          document.getElementById('checkpoints').innerHTML = checkpoints;
-          document.getElementById('date_executed').innerHTML = msg.date_execute;
-          document.getElementById('num_officers').innerHTML = msg.officers;
+          var parsed = JSON.parse(msg);
+          var checkpoints =  parsed.checkpoints;
+          console.log(checkpoints);
+          var target = parsed.target; 
+          document.getElementById('target').value = target;
+          document.getElementById('checkpoints').value = checkpoints;
+          document.getElementById('operation_name').innerHTML = parsed.name;
+          document.getElementById('date_executed').innerHTML = parsed.date_execute;
+          document.getElementById('num_officers').innerHTML = parsed.officers;
         },
         });
     })();
 
-    var target = document.getElementById('target').value;
-    var checkpoints =  document.getElementById('checkpoints').value;
+    var moretarget = document.getElementById('target').value;
+    var morecheckpoints =  document.getElementById('checkpoints').value;
+    alert(morecheckpoints);
     var minZoomLevel = 15;
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};    
     var map;
@@ -88,13 +92,13 @@
     });
 
     var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(target),
+          position: new google.maps.LatLng(moretarget),
           icon: 'images/target1.png',
           map: map,
           title: 'Target Location'
     });
     for (var i = 0; i < checkpoints.length; i++) {
-          var check = checkpoints[i].latlng
+          var check = morecheckpoints[i].latlng
           var checkpoint = new google.maps.LatLng(check);
           var markers = new google.maps.Marker({
             position: checkpoint,

@@ -12,9 +12,9 @@
  'date_execute' => $row['date_execute'],
  'officers' => $row['num_officers'],
  'target' => $row['target_location'],
- 'checkpoints' => $row['checkpoint_targets'],
+ 'checkpoints' => $row['checkpoint_targets']
  );
+};
  echo json_encode($data);
  
-}
 ?>

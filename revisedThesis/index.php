@@ -19,11 +19,7 @@
   </head>
 
   <body>
-    
-
-
-    
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top" style="margin-top:-80px;">
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
 
@@ -38,19 +34,22 @@
           <a class="nav-link" href="#">Contact</a>
         </li>
       </ul>-->
-    </nav>
 
     <div class="container">
     <center>
-      <div class="col-lg-4">
+      <div class="col-lg-3">
         <a href="server_create_plan.php"><img src="images/new_plan.png" class="icons"></a>
         <p class="lead">Create New Plan</p>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-3">
+        <a href="server_view_plan.php"><img src="images/view_btn.png" class="icons"></a>
+        <p class="lead">View Operations</p>
+      </div>
+      <div class="col-lg-3">
         <a href="server_history.php"><img src="images/history.png" class="icons">
         </a><p class="lead">Operations History</p>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-3">
         <img src="images/settings.png" class="icons">
         <p class="lead">About</p>
       </div>
@@ -65,8 +64,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
   </body>
 </html>
