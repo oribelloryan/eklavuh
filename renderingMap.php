@@ -1,10 +1,10 @@
 <?php 
 include('db_conn.php');
 
-$id = $_GET['id'];
+$id = $_GET['id'] ;
 $sql = "SELECT * FROM tbl_operations JOIN plotting ON tbl_operations.operation_id = plotting.operation_id where tbl_operations.operation_id = $id";
 $result = $conn->query($sql);
- while($row = $result->fetch_assoc()){
+ while($row = $result->fetch(PDO::FETCH_ASSOC)){
       $operation = $row['operation_name'];
       $plan = $row['date_plan'];
       $officers = $row['num_officers'];
@@ -50,7 +50,7 @@ $result = $conn->query($sql);
     </div>
 
     <div class="container">
-    <p><h4><center><?php echo $operation; ?></center></h4></p>
+    <p><h4><center>du30</center></h4></p>
     <p>Date Executed: <?php echo $exe; ?>
     <p>Number of officers: <?php echo $officers; ?>
     <div id="map" ></div>
@@ -59,6 +59,7 @@ $result = $conn->query($sql);
     <button onClick="release()">Coordinates</button>
     </div>
     </div><!-- /.container -->
+    <script src="js/boundary.js"></script>
     <script type="text/javascript">
     var minZoomLevel = 15;
     var centeroftheearth = {lat: 14.600353, lng: 121.036745};    
@@ -73,6 +74,18 @@ $result = $conn->query($sql);
     mapTypeId: 'roadmap'
     });
    
+     var boundary = new google.maps.Polygon({paths: boundaries});
+    
+    var boundaryLine = new google.maps.Polyline({
+          path: boundaries,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        boundaryLine.setMap(map);
+
     var marker = new google.maps.Marker({
           position: target,
           //icon: 'images/target1.png',
@@ -82,8 +95,10 @@ $result = $conn->query($sql);
     
     for (var i = 0; i < checkpoints.length; i++) {
           var checkpoint = checkpoints[i];
+          console.log(checkpoint);
+          console.log(checkpoint.latlng.lat+"!"+checkpoint[2]);
           var markers = new google.maps.Marker({
-            position: {lat: checkpoint[1], lng: checkpoint[2]},
+            position: {lat: checkpoint.latlng.lat, lng: checkpoint.latlng.lng},
             map: map,
           });
      
@@ -128,8 +143,8 @@ $result = $conn->query($sql);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>

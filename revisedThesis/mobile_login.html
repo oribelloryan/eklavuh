@@ -76,7 +76,7 @@
       }
     
       $.ajax({
-        url : "mobile_logging.php",
+        url : "https://interceptorpnp.000webhostapp.com/mobile_logging.php",
         type : "POST",
         dataType: "JSON",
         data : {
@@ -85,7 +85,6 @@
       },
         success : function(msg){
           var info;
-          alert(msg);
           if(msg == "NoRecord"){
             alert("Invalid Credentials");
           }else{

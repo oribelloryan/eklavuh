@@ -28,8 +28,7 @@ $stmt= $conn->query("SELECT MAX(operation_id) as id FROM tbl_operations");
   </head>
 
   <body>
-
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top" style="margin-top:-80px;">
       <center><img src="images/header.png" style="width:400px;"></center>
     </div>
 

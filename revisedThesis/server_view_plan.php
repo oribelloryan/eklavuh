@@ -3,7 +3,7 @@ include('db_conn.php');
 
 $today = date("M-d-Y");
 
-$sql = "SELECT * FROM tbl_operations WHERE date_execute  < CURDATE()";
+$sql = "SELECT * FROM tbl_operations WHERE date_execute  >= CURDATE()";
 $results = $conn->query($sql);
 
 function dateformatting($date){
@@ -91,7 +91,7 @@ function dateDifference($date1, $date2){
     <th>Operation</th>
     <th>Date Planned</th>
     <th>Date Executed</th>
-    <th>Executed</th>
+    <th>Execution</th>
     </thead>
     <tbody>
     <?php
@@ -105,7 +105,7 @@ function dateDifference($date1, $date2){
              echo "<td><p>" .dateformatting($result['date_plan'])."</p></td>";
              echo "<td><p>" .dateformatting($result['date_execute'])."</p></td>";
      $neg = abs($diff);
-            echo "<td><p> $neg days ago</p></td>";
+            echo "<td><p> $neg day(s) to go</p></td>";
      echo "</tr></a>";
     }
     ?>
