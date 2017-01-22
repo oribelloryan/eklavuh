@@ -170,34 +170,48 @@ function addMarker(location, map) {
     }
 }
 
-function returnData (data, fn){
- $.ajax({
-            type: "GET",
-            url: "https://roads.googleapis.com/v1/nearestRoads?points="+check+"&key=AIzaSyAjWM8z2Q0G7IzoMoD75WCGTRTTNlYiCGI",
-            success: function(msg){ 
-              if(msg === undefined){
-              }else{
+function returnData (data, array){
+ // $.ajax({
+ //            type: "GET",
+ //            url: "https://roads.googleapis.com/v1/nearestRoads?points="+check+"&key=AIzaSyAjWM8z2Q0G7IzoMoD75WCGTRTTNlYiCGI",
+ //            success: function(msg){ 
+ //              if(msg === undefined){
+ //              }else{
                 
-                var lat = msg.snappedPoints[0].location.latitude;
-                var long = msg.snappedPoints[0].location.longitude;
-                var newlocation = {latlng:new google.maps.LatLng(lat, long)};
-                console.log(newlocation);
-                point1.push(newlocation);
-              }
-            }
-            });
- return d.data();
+ //                var lat = msg.snappedPoints[0].location.latitude;
+ //                var long = msg.snappedPoints[0].location.longitude;
+ //                var newlocation = {latlng:new google.maps.LatLng(lat, long)};
+ //                console.log(newlocation);
+ //                point1.push(newlocation);
+ //              }
+ //            }
+ //            });
+ // return d.data();
+ var lat;
+ var lng;
+
+ $.get( "https://roads.googleapis.com/v1/nearestRoads?points="+data+"&key=AIzaSyAjWM8z2Q0G7IzoMoD75WCGTRTTNlYiCGI", function( msg ) {
+  lat = msg.snappedPoints[0].location.latitude;
+  lng = msg.snappedPoints[0].location.longitude;
+  // var marker = new google.maps.Marker({
+  //        position: {lat: lat, lng: lng},
+  //        map: map
+  //        });
+  //        marker.setAnimation(google.maps.Animation.DROP);
+});
+  var newlocation = {latlng:new google.maps.LatLng(lat,lng)};
+  point1.push(newlocation);
 }
-    var circleCounter = 0;
+var point1 = [];
+
 function addMarker2(location, map) {
     // Add the marker at the clicked location, and add the next-available label
     // from the array of alphabetical characters.
     var allowedCircle = 1;
-    if(circleCounter < allowedCircle){
-         circleCounter++;
-        var ctr;
+    var ctr;
         var curr;
-        var point1=[];
+        
+      
 
     //var directionService = new google.maps.DirectionService();
          var mapradius=radiussize*.0000100;
@@ -209,20 +223,22 @@ function addMarker2(location, map) {
                 ycor =location.lng() + (mapradius*Math.sin(ctr));
             
                 var check = xcor + "," + ycor;
-                console.log(check);
-           
+                returnData(check, point1);
 
-            ctr=ctr+15;
+            ctr=ctr+50;
             xcor=xcor;
             ycor=ycor;
         }
-        console.log(Object.keys(point1));
+        console.log("push");
+        console.log(point1);
+
          var i;
          var marker;
          for (i=0;i<point1.length;i++){
          marker = new google.maps.Marker({
          position:point1[i].latlng,
-         map: map
+         map: map,
+         icon: image('images/crosshair.png')
          });
          marker.setAnimation(google.maps.Animation.DROP);
          }
@@ -231,9 +247,6 @@ function addMarker2(location, map) {
         document.getElementById('save').style.visibility = 'visible';
         document.getElementById('targetHdn').value = t;
         document.getElementById('checkpointsHdn').value = c;
-    }else{
-        return;
-    }
 }
 
 function saving(){

@@ -1,24 +1,32 @@
-<!DOCTYPE html> 
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<style type="text/css">
+  .ui-page {
+    background-color:#ffffff;    
+  }
 
-    <title>THE INTERCEPTOR - CREATE PLAN</title>
+  .navbar li:hover{
+    background-color:#4363a9;
+  }
 
-    <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+  .breach{
+    width:100%;
+    height:100%;
+    margin-top: 0%;
+    margin-left: 0%;
+  }
 
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
+  #buts{
+    border-radius:100%;
+    -webkit-border-radius:100%;
+    background-color:#d90e39;
+    width:100%;
+    height:100%;
+  }
 
-    </script>
-  <style>
   #map{
        width: 100%;
        height: 550px; 
@@ -31,33 +39,73 @@
   #checkpoints{
     visibility: hidden;
   }
-  </style>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous">
-      </script>
-
-
-  </head>
-
-  <body>
-    <span id="target"></span>
-    <span id="checkpoints" ></span>
-    <div class="navbar navbar-fixed-top" style="margin-top:-80px;">
-      <center><img src="images/header.png" style="width:400px;"></center>
+</style>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<!-- Main Page -->
+<!-- Operation Details Page -->
+<div data-role="page" id="op-details">
+  <div data-role="header" style="background-color:#153d94;margin-top:-1px;">
+    <center><img src="images/header.png" style="width:400px;margin-top:2px;"></center>
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#op-details" data-transition="none">Operation Details</a></li>
+        <li><a href="#op-map" data-transition="none">Operation Map</a></li>
+        <li><a href="#breached" data-transition="none">Breached</a></li>
+      </ul>
     </div>
-
-    <div class="container">
+  </div>
+<!--Content for operation details -->
+  <div data-role="main" class="ui-content" id="op-details">
+    <p>Operation Details Content...</p>
     <p><h4><center>Operation :<span id="operation_name"></span></center></h4></p>
     <p>Date Executed: <span id="date_executed"></span>
     <p>Number of officers: <span id="num_officers"></span>
-    <div id="map" ></div>
-    <div id="formradius">
-    <input type="number" id="radiussize">
-    <button onClick="release()">Coordinates</button>
+  </div>
+</div> 
+
+<!--Page for Operation Map -->
+<div data-role="page" id="op-map">
+  <div data-role="header" style="background-color:#153d94;margin-top:-1px;">
+    <center><img src="images/header.png" style="width:400px;margin-top:2px;"></center>
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#op-details" data-transition="none">Operation Details</a></li>
+        <li><a href="#op-map" data-transition="none">Operation Map</a></li>
+        <li><a href="#breached" data-transition="none">Breached</a></li>
+      </ul>
     </div>
-    </div><!-- /.container -->
-    <script src="js/boundary.js"></script>
-    <script type="text/javascript">
+  </div>
+<!-- Content for Operation Map -->
+  <div data-role="main" class="ui-content" id="op-details">
+    <p>Operation Map...</p>
+    <div id="map" ></div>
+    <p>Maps</p>
+  </div>
+</div>
+<!-- Page for Operation Breached -->
+<div data-role="page" id="breached">
+  <div data-role="header" style="background-color:#153d94;margin-top:-1px;">
+    <center><img src="images/header.png" style="width:400px;margin-top:2px;"></center>
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#op-details" data-transition="none">Operation Details</a></li>
+        <li><a href="#op-map" data-transition="none">Operation Map</a></li>
+        <li><a href="#breached" data-transition="none">Breached</a></li>
+      </ul>
+    </div>
+  </div>
+<!--Content for Operation Breached -->
+  <div data-role="main" class="ui-content" id="breached">
+    <center><p>Click Me!!</p>
+    <button id="buts" onclick="breachedFunction();"><img src="images/barricade_breached_button.png" alt="button" class="breach"></button></center>
+  </div>
+</div>
+<script src="js/boundary.js"></script>
+ <script type="text/javascript">
   function getUrl(){
       var url = window.location.href;
       var start = url.indexOf('=')+1;
@@ -185,16 +233,33 @@
       }
 
       function doNothing() {}
-     </script>
-    <script async defer
+  </script>
+  <script>
+    function breachedFunction(){
+       var sure = confirm("Are you sure want to create this event?");
+       if(sure){
+           var pass = prompt("Please provide the operation password to invoke breach protocol");
+           if(pass){
+            $.ajax({
+               type: "POST",
+               url: "callback.php",
+               data: {
+               id: oppId,
+               },
+               success: function(msg){
+               alert(msg);
+               }
+            });
+           }else{
+               alert("You cancelled the event");
+           }
+       }else{
+        return false;
+       }
+    }
+  </script>
+   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1SFa75QzMfOtf7rudCh6RFgaNk6ptbzo&libraries=drawing&callback=initMap">
     </script>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
-  </body>
+</body>
 </html>

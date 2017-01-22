@@ -123,7 +123,8 @@ function dateDifference($date1, $date2){
     <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script>
     $(document).ready(function(){
-       $('#datatable').dataTable();
+       var table = $('#datatable').dataTable();
+       alert(table);
         });
     </script>
   </body>

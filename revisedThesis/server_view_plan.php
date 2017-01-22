@@ -100,7 +100,7 @@ function dateDifference($date1, $date2){
      $diff = $d[1];
      $id = $result['operation_id'];
      echo '<a href="#" onClick="pressed('.$id.');"><tr>';
-             echo "<td><p>" .$id."</p></td>";
+             echo "<td>" .$id."</td>";
              echo "<td><p>" .$result['operation_name']."</p></td>";
              echo "<td><p>" .dateformatting($result['date_plan'])."</p></td>";
              echo "<td><p>" .dateformatting($result['date_execute'])."</p></td>";
@@ -123,7 +123,17 @@ function dateDifference($date1, $date2){
     <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script>
     $(document).ready(function(){
-       $('#datatable').dataTable();
+       var table = $('#datatable').DataTable();
+
+       $('#datatable tbody').on( 'click', 'td', function () {
+          var id = table.row( this ).data()[0];
+          var x = confirm("Are you sure you want to redirect to this operation?");
+          if(x){
+             window.location.href = "server_renderingMap.php?operation_id=" + id;
+          }else{
+            return;
+          }
+} );
         });
     </script>
   </body>
